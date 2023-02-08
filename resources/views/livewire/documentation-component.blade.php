@@ -10,12 +10,12 @@
 		    <nav id="docs-nav" class="docs-nav navbar">
 			    <ul class="section-items list-unstyled nav flex-column pb-3">
 				    <li class="nav-item section-title"><a class="nav-link scrollto active" href="#section-1"><span class="theme-icon-holder me-2"><i class="fas fa-map-signs"></i></span>Introduction</a></li>
-				    <li class="nav-item"><a class="nav-link scrollto" href="#item-1-1">Section Item 1.1</a></li>
+				    {{-- <li class="nav-item"><a class="nav-link scrollto" href="#item-1-1">Section Item 1.1</a></li>
 				    <li class="nav-item"><a class="nav-link scrollto" href="#item-1-2">Section Item 1.2</a></li>
 				    <li class="nav-item"><a class="nav-link scrollto" href="#item-1-3">Section Item 1.3</a></li>
 				    <li class="nav-item"><a class="nav-link scrollto" href="#item-1-4">Section Item 1.4</a></li>
 				    <li class="nav-item"><a class="nav-link scrollto" href="#item-1-5">Section Item 1.5</a></li>
-				    <li class="nav-item"><a class="nav-link scrollto" href="#item-1-6">Section Item 1.6</a></li>
+				    <li class="nav-item"><a class="nav-link scrollto" href="#item-1-6">Section Item 1.6</a></li> --}}
 				    <li class="nav-item section-title mt-3"><a class="nav-link scrollto" href="#section-2"><span class="theme-icon-holder me-2"><i class="fas fa-arrow-down"></i></span>Installation</a></li>
 				    <li class="nav-item"><a class="nav-link scrollto" href="#item-2-1">PHP</a></li>
 				    <li class="nav-item"><a class="nav-link scrollto" href="#item-2-2">Pretashop</a></li>
@@ -64,40 +64,8 @@
 					    <section class="docs-intro">
 						    <p>Section intro goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus condimentum nisl id vulputate. Praesent aliquet varius eros interdum suscipit. Donec eu purus sed nibh convallis bibendum quis vitae turpis. Duis vestibulum diam lorem, vitae dapibus nibh facilisis a. Fusce in malesuada odio.</p>
 						</section><!--//docs-intro-->
-
-						<h5>Github Code Example:</h5>
-						<p>You can <a class="theme-link" href="https://gist.github.com/"  target="_blank">embed your code snippets using Github gists</a></p>
-						<div class="docs-code-block">
-							<!-- ** Embed github code starts ** -->
-							<script src="https://gist.github.com/xriley/fce6cf71edfd2dadc7919eb9c98f3f17.js"></script>
-							<!-- ** Embed github code ends ** -->
-						</div><!--//docs-code-block-->
-
-					     <h5>Highlight.js Example:</h5>
-						<p>You can <a class="theme-link" href="https://github.com/highlightjs/highlight.js" target="_blank">embed your code snippets using highlight.js</a> It supports <a class="theme-link" href="https://highlightjs.org/static/demo/" target="_blank">185 languages and 89 styles</a>.</p>
-						<p>This template uses <a class="theme-link" href="https://highlightjs.org/static/demo/" target="_blank">Atom One Dark</a> style for the code blocks: <br><code>&#x3C;link rel=&#x22;stylesheet&#x22; href=&#x22;//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.2/styles/atom-one-dark.min.css&#x22;&#x3E;</code></p>
-						<div class="docs-code-block">
-							<pre class="shadow-lg rounded">
-                            <code class="json hljs">[
-                            {
-                                <span class="hljs-attr">"title"</span>: <span class="hljs-string">"apples"</span>,
-                                <span class="hljs-attr">"count"</span>: [<span class="hljs-number">12000</span>, <span class="hljs-number">20000</span>],
-                                <span class="hljs-attr">"description"</span>: {<span class="hljs-attr">"text"</span>: <span class="hljs-string">"..."</span>, <span class="hljs-attr">"sensitive"</span>: <span class="hljs-literal">false</span>}
-                            },
-                            {
-                                <span class="hljs-attr">"title"</span>: <span class="hljs-string">"oranges"</span>,
-                                <span class="hljs-attr">"count"</span>: [<span class="hljs-number">17500</span>, <span class="hljs-literal">null</span>],
-                                <span class="hljs-attr">"description"</span>: {<span class="hljs-attr">"text"</span>: <span class="hljs-string">"..."</span>, <span class="hljs-attr">"sensitive"</span>: <span class="hljs-literal">false</span>}
-                            }
-                            ]
-
-
-                             </code></pre>
-						</div><!--//docs-code-block-->
-
-
 				    </header>
-				    <section class="docs-section" id="item-1-1">
+				    {{-- <section class="docs-section" id="item-1-1">
 						<h2 class="section-heading">Section Item 1.1</h2>
 						<p>Vivamus efficitur fringilla ullamcorper. Cras condimentum condimentum mauris, vitae facilisis leo. Aliquam sagittis purus nisi, at commodo augue convallis id. </p>
 						<p>Code Example: <code>npm install &lt;package&gt;</code></p>
@@ -191,9 +159,9 @@
 						</div>
 
 
-					</section><!--//section-->
+					</section><!--//section--> --}}
 
-					<section class="docs-section" id="item-1-2">
+					{{-- <section class="docs-section" id="item-1-2">
 						<h2 class="section-heading">Section Item 1.2</h2>
 						<p>Vivamus efficitur fringilla ullamcorper. Cras condimentum condimentum mauris, vitae facilisis leo. Aliquam sagittis purus nisi, at commodo augue convallis id. Sed interdum turpis quis felis bibendum imperdiet. Mauris pellentesque urna eu leo gravida iaculis. In fringilla odio in felis ultricies porttitor. Donec at purus libero. Vestibulum libero orci, commodo nec arcu sit amet, commodo sollicitudin est. Vestibulum ultricies malesuada tempor.</p>
 						<h5 class="mt-5">Lightbox Example:</h5>
@@ -306,9 +274,9 @@
 						</div><!--//table-responsive-->
 
 
-					</section><!--//section-->
+					</section><!--//section--> --}}
 
-					<section class="docs-section" id="item-1-3">
+					{{-- <section class="docs-section" id="item-1-3">
 						<h2 class="section-heading">Section Item 1.3</h2>
 						<p>Vivamus efficitur fringilla ullamcorper. Cras condimentum condimentum mauris, vitae facilisis leo. Aliquam sagittis purus nisi, at commodo augue convallis id. Sed interdum turpis quis felis bibendum imperdiet. Mauris pellentesque urna eu leo gravida iaculis. In fringilla odio in felis ultricies porttitor. Donec at purus libero. Vestibulum libero orci, commodo nec arcu sit amet, commodo sollicitudin est. Vestibulum ultricies malesuada tempor.</p>
 						<h5>Badges Examples:</h5>
@@ -363,9 +331,9 @@
 							    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 							</div>
                         </div>
-					</section><!--//section-->
+					</section><!--//section--> --}}
 
-					<section class="docs-section" id="item-1-4">
+					{{-- <section class="docs-section" id="item-1-4">
 						<h2 class="section-heading">Section Item 1.4</h2>
 						<p>Vivamus efficitur fringilla ullamcorper. Cras condimentum condimentum mauris, vitae facilisis leo. Aliquam sagittis purus nisi, at commodo augue convallis id. Sed interdum turpis quis felis bibendum imperdiet. Mauris pellentesque urna eu leo gravida iaculis. In fringilla odio in felis ultricies porttitor. Donec at purus libero. Vestibulum libero orci, commodo nec arcu sit amet, commodo sollicitudin est. Vestibulum ultricies malesuada tempor.</p>
 
@@ -383,15 +351,15 @@
 
 						<p>Vivamus efficitur fringilla ullamcorper. Cras condimentum condimentum mauris, vitae facilisis leo. Aliquam sagittis purus nisi, at commodo augue convallis id. Sed interdum turpis quis felis bibendum imperdiet. Mauris pellentesque urna eu leo gravida iaculis. In fringilla odio in felis ultricies porttitor. Donec at purus libero. Vestibulum libero orci, commodo nec arcu sit amet, commodo sollicitudin est. Vestibulum ultricies malesuada tempor.</p>
 
-					</section><!--//section-->
-					<section class="docs-section" id="item-1-5">
+					</section><!--//section--> --}}
+					{{-- <section class="docs-section" id="item-1-5">
 						<h2 class="section-heading">Section Item 1.5</h2>
 						<p>Vivamus efficitur fringilla ullamcorper. Cras condimentum condimentum mauris, vitae facilisis leo. Aliquam sagittis purus nisi, at commodo augue convallis id. Sed interdum turpis quis felis bibendum imperdiet. Mauris pellentesque urna eu leo gravida iaculis. In fringilla odio in felis ultricies porttitor. Donec at purus libero. Vestibulum libero orci, commodo nec arcu sit amet, commodo sollicitudin est. Vestibulum ultricies malesuada tempor.</p>
 					</section><!--//section-->
 					<section class="docs-section" id="item-1-6">
 						<h2 class="section-heading">Section Item 1.6</h2>
 						<p>Vivamus efficitur fringilla ullamcorper. Cras condimentum condimentum mauris, vitae facilisis leo. Aliquam sagittis purus nisi, at commodo augue convallis id. Sed interdum turpis quis felis bibendum imperdiet. Mauris pellentesque urna eu leo gravida iaculis. In fringilla odio in felis ultricies porttitor. Donec at purus libero. Vestibulum libero orci, commodo nec arcu sit amet, commodo sollicitudin est. Vestibulum ultricies malesuada tempor.</p>
-					</section><!--//section-->
+					</section><!--//section--> --}}
 
 			    </article>
 
@@ -413,15 +381,23 @@
 					<section class="docs-section" id="item-2-2">
 						<h2 class="section-heading">Pretashop</h2>
 						<p>Pour commencer, vous devez télécharger la dernière version de notre module Prestashop.</p>
-                        <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i> Download Now</a>
-                        <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i> Download Now</a>
+                        <ul>
+                            <li>
+                                <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i> Download Now</a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i> Download Now</a>
+                            </li>
+                        </ul>
 
                     </section><!--//section-->
 
 					<section class="docs-section" id="item-2-3">
 						<h2 class="section-heading">Woocommerce</h2>
 						<p>Pour commencer, vous devez télécharger la dernière version de notre plugin WordPress/WooCommerce.</p>
-                        <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i> Download Now</a>
+                        <p>
+                            <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i> Download Now</a>
+                        </p>
                         <p>Vous devez tout d’abord avoir le plugin WooCommerce installé et activé sur votre site WordPress.</p>
                     </section><!--//section-->
                     <section class="docs-section" id="item-2-4">
@@ -438,6 +414,7 @@
 					    <h1 class="docs-heading">APIs</h1>
 					    <section class="docs-intro">
 						    <p>Section intro goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus condimentum nisl id vulputate. Praesent aliquet varius eros interdum suscipit. Donec eu purus sed nibh convallis bibendum quis vitae turpis. Duis vestibulum diam lorem, vitae dapibus nibh facilisis a. Fusce in malesuada odio.</p>
+
 						</section><!--//docs-intro-->
 				    </header>
 

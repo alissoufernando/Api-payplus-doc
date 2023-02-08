@@ -1,0 +1,2113 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: PayPlus Documentation
+  description: "API PayPlus"
+servers:
+  - url: https://app.payplus.africa
+  #- url: https://app.payplus.africa/pay/v01/redirect/checkout-invoice
+paths:
+  /api/active_countries:
+    get:
+      summary: Get Active Countries / Liste des pays actifs
+      operationId: getActiveCountries
+      tags:
+        - Client API
+      responses:
+        200:
+          description: Countries list get successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+                  connected:
+                    type: boolean
+                  pays:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Country"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        500:
+          description: Internal server error
+
+  /api/registration:
+    post:
+      summary: Register/Inscription
+      operationId: register
+      tags:
+        - Client API
+      parameters:
+        - name: User
+          in: query
+          required: true
+          description: User object
+          schema:
+            type: object
+            required:
+            $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/connection:
+    post:
+      summary: Sign in / Se connecter - Mailtab
+      operationId: signin
+      tags:
+        - Client API
+      parameters:
+        - name: source
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - mailtab
+              - phonetab
+        - name: mailtab_email
+          in: query
+          schema:
+            type: string
+        - name: mailtab_password
+          in: query
+          schema:
+            type: string
+        - name: phonetab_contact
+          in: query
+          schema:
+            type: string
+        - name: phonetab_password
+          in: query
+          schema:
+            type: string
+        - name: auth_token
+          in: query
+          example: "auth_token"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        400:
+          description: Bad request
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/refresh_token:
+    get:
+      summary: Refresh Token
+      operationId: refreshtoken
+      tags:
+        - Client API
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        400:
+          description: Bad request
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/logout:
+    post:
+      summary: Logout / Se déconnecter
+      operationId: logout
+      tags:
+        - Client API
+      responses:
+        200:
+          description: Logout Successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/projects:
+    get:
+      summary: Get projects list / Liste des projets
+      operationId: getProjectsList
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/project:
+    post:
+      summary: Create Project / Créer un projet
+      operationId: createProject
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: Project
+          in: query
+          description: Project object
+          required: true
+          schema:
+            type: object
+            required:
+            $ref: "#/components/schemas/Project"
+        - name: agent_app
+          in: query
+          description: 0-projet global 1-projet paylink 2-agence 4-projet api
+          required: false
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+              - 2
+              - 3
+      responses:
+        200:
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/paylinks:
+    get:
+      summary: Get paylinks list / Liste des paylinks
+      operationId: getPaylinksList
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaylinkResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/paylink:
+    post:
+      summary: Create Paylink / Créer un Paylink
+      operationId: createPaylink
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: idauto
+          in: query
+          schema:
+            type: integer
+        - name: app
+          in: query
+          required: true
+          description: "Id du projet"
+          schema:
+            type: integer
+        - name: libelle
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: description
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: prix
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: endpoint
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: dureedevie
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: datededebut
+          in: query
+          schema:
+            type: string
+            default: null
+        - name: datefin
+          in: query
+          schema:
+            type: string
+            default: null
+        - name: quantiteun
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: message
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: lien
+          in: query
+          schema:
+            type: string
+        - name: tarification
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: vente
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: stock
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: null
+        - name: added_files
+          in: query
+          schema:
+            type: string
+            default: null
+        - name: added_description_files
+          in: query
+          schema:
+            type: string
+            default: null
+        - name: deleted_files
+          in: query
+          schema:
+            type: string
+            default: null
+        - name: deleted_description_files
+          in: query
+          schema:
+            type: string
+            default: null
+      responses:
+        200:
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaylinkResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/newaccount:
+    post:
+      summary: Create new personal account / Nouveau compte personnel
+      operationId: createNewAccount
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: country
+          in: query
+          required: true
+          description: "Id de votre pays"
+          schema:
+            type: integer
+        - name: contact
+          in: query
+          required: true
+          description: "Contact de l'utilisateur"
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+                  loged_out:
+                    type: string
+                  personal:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PersonalAccount"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/tellers:
+    get:
+      summary: Teller List / Liste des tellers
+      operationId: tellerList
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TellerResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal Server Error
+
+  /api/teller:
+    post:
+      summary: Create Teller / Créer un Teller
+      operationId: createTeller
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: Teller
+          in: query
+          required: true
+          description: Teller object
+          schema:
+            type: object
+            required:
+            $ref: "#/components/schemas/Teller"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TellerResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/passwordrequest:
+    post:
+      summary: Forgotten password request
+      operationId: forgottenPasswordRequest
+      tags:
+        - Client API
+      parameters:
+        - name: email
+          in: query
+          required: true
+          description: The email of User
+          schema:
+            type: string
+      responses:
+        200:
+          description: Received
+          content:
+            application:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+                  token:
+                    type: string
+        400:
+          description: Bad request
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/passwordrequestcheck/{token}:
+    get:
+      summary: Forgotten Password Request Check
+      operationId: checkPassword
+      tags:
+        - Client API
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: "Token envoyé dans votre boite mail"
+          schema:
+            type: string
+      responses:
+        200:
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+                  email:
+                    type: string
+        400:
+          description: Bad request
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/passwordrequestprocess/{token}:
+    post:
+      summary: Forgotten password request process
+      operationId: forgottenPasswordProcess
+      tags:
+        - Client API
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: Token envoyé lors de la requete de mot de passe oublié
+          schema:
+            type: string
+        - name: newpassword
+          in: query
+          required: true
+          description: New password
+          schema:
+            type: string
+        - name: confirmnewpassword
+          in: query
+          required: true
+          description: Confirm new password
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Abonne"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/accounts:
+    get:
+      summary: Accounts List / Liste des comptes
+      operationId: accountsList
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+                  loged_out:
+                    type: string
+                  personal:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PersonalAccount"
+                  business:
+                    type: array
+                    items:
+                      "string"
+                  grilles:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Grille"
+                  methodes:
+                    type: array
+                    items:
+                      "string"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/personaltransactions:
+    get:
+      summary: Transactions List / Liste des transactions
+      operationId: transactionsList
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: from
+          in: query
+          description: "Date de début d'intervalle de temps"
+          schema:
+            type: string
+          example: "2018-01-01"
+        - name: to
+          in: query
+          description: "Date de fin d'intervalle de temps"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+                  transactions:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Transaction"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/checkuser:
+    get:
+      summary: Check User / Vérification de l'utilisateur
+      operationId: checkUser
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Abonne"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/updateuser:
+    post:
+      summary: Update User / Modifier utilisateur
+      operationId: updateUser
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: User
+          in: query
+          description: "User object"
+          required: true
+          schema:
+            type: object
+            required:
+            $ref: '#/components/schemas/User'
+        - name: newpassword
+          in: query
+          description: "Nouveau mot de passe"
+          required: false
+          schema:
+            type: string
+        - name: confirmnewpassword
+          in: query
+          description: "Confirmer mot de passe"
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/checkinvoice:
+    get:
+      summary: Check Invoice / Vérifier Facture
+      operationId: checkInvoice
+      tags:
+        - Client API
+      parameters:
+        - name: token
+          in: query
+          description: "Token de la facture à vérifier"
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfirmInvoiceResponse'
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/changepaylinkstatus:
+    post:
+      summary: Update paylink status / Modifier statut du Paylink
+      operationId: updatePaylinkStatus
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /api/changeprojectstatus:
+    post:
+      summary: Update project status / Modifier statut du projet
+      operationId: updateProjectStatus
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /pay/v01/balance:
+    post:
+      summary: Balance / Solde
+      operationId: balance
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: integer
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        405:
+          description: Not Allowed
+        500:
+          description: Internal Server Error
+
+  /api/wallettopup:
+    post:
+      summary: Customer Wallet top up
+      operationId: walletTopUp
+      tags:
+        - Client API
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: account
+          in: query
+          schema:
+            type: number
+        - name: account_number
+          in: query
+          schema:
+            type: number
+        - name: amount
+          in: query
+          schema:
+            type: number
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+                  email_abonne:
+                    type: string
+                  notificationmails_app:
+                    type: null
+                  response_code:
+                    type: string
+                  token:
+                    type: string
+                  response_text:
+                    type: string
+                  invoice:
+                    type: string
+                  custom_data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CustomData"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /admin_api/connection:
+    post:
+      summary: Connection-Admin / Login Admin
+      operationId: connectionAdmin
+      tags:
+        - Admin API
+      parameters:
+        - name: User
+          in: query
+          required: true
+          description: "Admin data"
+          schema:
+            type: object
+            $ref: '#/components/schemas/ConnectionAdmin'
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: string
+
+  /admin_api/logout:
+    post:
+      summary: Logout-Admin / Déconnexion Admin
+      operationId: logout
+      tags:
+        - Admin API
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /admin_api/countries:
+    get:
+      summary: Countries List / Liste des pays
+      operationId: countriesList
+      tags:
+        - Admin API
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+               type: array
+               items:
+                 $ref: "#/components/schemas/Country"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /admin_api/networks:
+    get:
+      summary: Networks List / Liste des réseaux
+      operationId: networkList
+      tags:
+        - Admin API
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Network"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /admin_api/vm:
+    get:
+      summary: Vm List / Liste des Vm
+      operationId: vmList
+      tags:
+        - Admin API
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /admin_api/check_payouts:
+    post:
+      summary: Check payouts | Basic Auth
+      operationId: checkPayouts
+      tags:
+        - Admin API
+      parameters:
+        - name: payouts
+          in: query
+          required: true
+          description: "Tableau de payouts"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Id"
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /admin_api/process_payouts:
+    post:
+      summary: Pending payouts processing | Basic auth Copy
+      operationId: pendingPayoutsProcess
+      tags:
+        - Admin API
+      security:
+        - basicAuth
+      parameters:
+        - name: payouts
+          in: query
+          required: true
+          description: "Tableau de payouts"
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Payout'
+        - name: group
+          in: query
+          required: true
+          description: ""
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /admin_api/payouts:
+    post:
+      summary: Pending payouts processing
+      operationId: pendingPayoutsProcess
+      tags:
+        - Admin API
+      parameters:
+        - name: payouts
+          in: query
+          required: true
+          description: "Tableau de payouts"
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Payout'
+        - name: group
+          in: query
+          required: true
+          description: ""
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /admin_api/pending_payouts/customer:
+    get:
+      summary: Pending payouts list | Basic auth
+      operationId: pendingPayoutsList
+      tags:
+        - Admin API
+      security:
+        - basicAuth
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Payout"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Sever Error
+
+  /admin_api/payouts/customer:
+    get:
+      summary: Pending payouts list
+      operationId: pendingPayoutsList
+      tags:
+        - Admin API
+      security:
+        - basicAuth
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Payout"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Sever Error
+
+  /pay/v01/redirect/checkout-invoice/create:
+    post:
+      summary: Redirect Invoice
+      operationId: createInvoice
+      tags:
+        - Payment API
+      parameters:
+        - name: ApiKey
+          in: header
+          description: "clé principale générée lors de la création de votre application"
+          schema:
+            type: string
+          required: true
+        - name: Commande
+          in: query
+          required: true
+          description: "La commande"
+          schema:
+            type: object
+            required:
+            $ref: "#/components/schemas/Commande"
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmInvoiceResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /pay/v01/straight/checkout-invoice/create:
+    post:
+      summary: Straight Invoice
+      operationId: straightInvoice
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Payment API
+      parameters:
+        - name: ApiKey
+          in: header
+          required: true
+          description: "clé principale générée lors de la création de votre application"
+          schema:
+            type: string
+        - name: Commande
+          in: query
+          required: true
+          description: "La commande"
+          schema:
+            $ref: '#/components/schemas/Commande'
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /pay/v01/redirect/checkout-invoice/confirm/{invoiceToken}:
+    get:
+      summary: Invoice Confirm
+      tags:
+        - Payment API
+      parameters:
+        - name: ApiKey
+          in: header
+          required: true
+          description: "clé principale générée lors de la création de votre application"
+          schema:
+            type: string
+        - name: invoiceToken
+          in: path
+          required: true
+          description: "Le token que vous avez reçu apres l’envoi de la requete"
+          schema:
+            type: integer
+            format: int32
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: confirmed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmInvoiceResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /pay/v01/withdrawal/create:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Redirect Wihhdrawal
+      tags:
+        - Payment API
+      parameters:
+        - name: ApiKey
+          in: header
+          required: true
+          description: "clé principale générée lors de la création de votre application"
+          schema:
+            type: string
+        - name: Commande
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Withdrawal'
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /pay/v01/withdrawal/confirm/{withdrawlToken}:
+    get:
+      summary: Redirect Withdrawal confirm
+      operationId: withdrawalConfirmRedirect
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Payment API
+      parameters:
+        - name: Apikey
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: withdrawlToken
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /pay/v01/straight/payout:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Straight Withdrawal
+      operationId: straightWithdrawal
+      tags:
+        - Payment API
+      parameters:
+        - name: Apikey
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: Commande
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Withdrawal'
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /pay/v01/straight/payout/confirm/{payoutToken}:
+    get:
+      summary: Straight Withdrawal confirm
+      operationId: confirmWithdrawalStraight
+      tags:
+        - Payment API
+      security:
+        - bearerAuth
+      parameters:
+        - name: ApiKey
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: payoutToken
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unautorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /vm/v01/index.php/new/sms:
+    post:
+      summary: Vm SMS
+      operationId: wmSMS
+      tags:
+        - Payment API
+      parameters:
+        - name: Jak
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    ConnectionClient:
+      type: object
+      properties:
+        source:
+          type: string
+        mailtab_email:
+          type: string
+        mailtab_password:
+          type: string
+
+    ConnectionAdmin:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        indicatif:
+          type: integer
+          description: "Indicatif de votre pays"
+        contact:
+          type: integer
+          description: "Contact de l'utilisateur"
+        country:
+          type: integer
+          description: "Id du pays"
+        lastname:
+          type: string
+          description: "Prénom de l'utilisateur"
+        firstname:
+          type: string
+          description: "Nom de l'utilisateur"
+        gender:
+          type: boolean
+          description: "1 pour Masculin et 0 pour féminin"
+        birthday:
+          type: string
+          description: "Date de naissance"
+        password:
+          type: string
+
+    Project:
+      type: object
+      properties:
+        idauto:
+          type: integer
+          format: int32
+        password:
+          type: string
+          description: "Mot de passe de client"
+        newpassword:
+          type: string
+          description: "Mot de passe spécifique au projet"
+        confirmnewpassword:
+          type: string
+        nom:
+          type: string
+          description: "Nom du projet"
+          example: "new_api_8"
+        status:
+          type: integer
+          description: "Statut du projet"
+        description:
+          type: string
+          description: "Description du projet"
+        notification:
+          type: string
+          description: "Email de réception de notifications"
+
+    Paylink:
+      type: object
+      properties:
+        idauto:
+          type: integer
+        description:
+          type: string
+        prix:
+          type: integer
+        endpoint:
+          type: string
+        dureedevie:
+          type: integer
+        datedebut:
+          type: string
+        datefin:
+          type: string
+        quantiteun:
+          type: integer
+        action:
+          type: integer
+        message:
+          type: string
+        lien:
+          type: string
+        tarification:
+          type: integer
+        vente:
+          type: integer
+        stock:
+          type: integer
+        added_files:
+          type: string
+        added_description_files:
+          type: string
+        deleted_files:
+          type: string
+        deleted_description_files:
+          type: string
+
+    Teller:
+      type: object
+      properties:
+        idauto:
+          type: integer
+          format: int32
+          description: ""
+        nom:
+          type: string
+          description: ""
+        id_project:
+          type: integer
+          format: int32
+          description: ""
+        statut:
+          type: integer
+          format: int32
+          description: ""
+
+    Payout:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ""
+        action:
+          type: integer
+          format: int64
+          description: ""
+        comments:
+          type: string
+          description: ""
+
+    Action:
+      type: object
+      properties:
+        cancel_url:
+          type: string
+          example: "https://www.canceladdress.com"
+        callback_url:
+          type: string
+          example: "https://www.callbackaddress.com"
+        return_url:
+          type: string
+          example: "https://www.returnaddress.com"
+
+    Store:
+      type: object
+      properties:
+        name:
+          type: string
+        website_url:
+          type: string
+
+    CustomData:
+      type: object
+      properties:
+        rubrique1:
+          type: string
+
+    Item:
+      type: object
+      required:
+      properties:
+        name:
+          type: string
+          example: "Article 1"
+        quantity:
+          type: string
+          example: 1
+        description:
+          type: string
+          example: "Description de l'article"
+        unit_price:
+          type: integer
+          format: int64
+          example: 500
+        total_price:
+          type: integer
+          format: int64
+          example: 400
+
+    Invoice:
+      type: object
+      required:
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+        total_amount:
+          type: integer
+          format: int64
+        description:
+          type: string
+        devise:
+          type: string
+        customer:
+          type: string
+          description: ""
+        customer_firstname:
+          type: string
+          description: ""
+        customer_lastname:
+          type: string
+          description: ""
+        customer_email:
+          type: string
+          description: ""
+        external_id:
+          type: integer
+          format: int32
+          description: ""
+        otp:
+          type: string
+          description: ""
+
+    ConfirmInvoiceResponse:
+      type: object
+      properties:
+        response_code:
+          type: integer
+          format: int32
+          description: "contient 00 si succes. si different de 00 alors echec"
+        token:
+          type: string
+          description: "id de la facture. il faut la conserver sur votre plateforme"
+        reponse_text:
+          type: string
+          description: "message texte décrivant le résultat de la requête"
+        status:
+          type: string
+          description: "indique le statut de la requête. valeurs possibles : pending (transaction en attente de validation), completed (transaction validée), notcompleted (transaction annulée). ce champ est vide si response_code est different de 00"
+        custom_data:
+          type: object
+          $ref: "#/components/schemas/CustomData"
+
+    Commande:
+      type: object
+      properties:
+        invoice:
+          type: object
+          required:
+          $ref: "#/components/schemas/Invoice"
+        store:
+          type: object
+          required:
+          $ref: "#/components/schemas/Store"
+        actions:
+          type: object
+          required:
+          $ref: "#/components/schemas/Action"
+        custom_data:
+          type: object
+          required:
+          $ref: "#/components/schemas/CustomData"
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        date:
+          type: string
+          description: "Date de la transaction"
+        montant:
+          type: integer
+          format: int64
+          description: "Montant de la transaction"
+        detail:
+          type: string
+          description: "Details de la transaction"
+        operation:
+          type: string
+
+    Country:
+      type: object
+      properties:
+        id_pays:
+          type: integer
+          format: int32
+        nom_pays:
+          type: string
+          description: "Nom du pays"
+        codeisoa2_pays:
+          type: string
+        codeisoa3_pays:
+          type: string
+        codenum_pays:
+          type: integer
+          format: int32
+        indicatif_pays:
+          type: integer
+          format: int64
+        statut_pays:
+          type: boolean
+
+    Network:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: "Nom du réseau"
+          example: "MTN/Moov"
+
+    Id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: "Identifiant"
+
+    Withdrawal:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        customer:
+          type: integer
+          format: int64
+          description: "User contact"
+        custom_data:
+          $ref: '#/components/schemas/CustomData'
+        callback_url:
+          type: string
+          description: "Lien de retour"
+        top_up_wallet:
+          type: integer
+          format: int128
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: boolean
+        message:
+          type: string
+
+    Abonne:
+      type: object
+      properties:
+        error:
+          type: boolean
+        message:
+          type: string
+        loged_out:
+          type: string
+        user:
+          type: object
+          properties:
+            id_abonne:
+              type: integer
+            nom_abonne:
+              type: string
+            prenom_abonne:
+              type: string
+            email_abonne:
+              type: string
+            password_abonne:
+              type: string
+            statut_abonne:
+              type: string
+            datedenaissance_abonne:
+              type: string
+            id_pays:
+              type: integer
+            datecreation_abonne:
+              type: string
+            contact_abonne:
+              type: string
+            sexe_abonne:
+              type: boolean
+            comptedeveloppeur_abonne:
+              type: integer
+              format: int32
+            banissement_abonne:
+              type: null
+            transfert_abonne:
+              type: integer
+              format: int64
+            transfertinternational_abonne:
+              type: integer
+              format: int64
+            balance_abonne:
+              type: integer
+            indicatif_pays:
+              type: integer
+              format: int64
+
+    ProjectResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        message:
+          type: string
+        loged_out:
+          type: string
+        projects:
+          type: array
+          items:
+            properties:
+              id_app:
+                type: integer
+              nom_app:
+                type: string
+              key_app:
+                type: string
+              statut_app:
+                type: integer
+              statutretrait_app:
+                type: boolean
+              datecreation_app:
+                type: string
+              id_abonne:
+                type: integer
+              prodtoken_app:
+                type: string
+              privatekey_app:
+                type: string
+              description_app:
+                type: string
+              notificationmails_app:
+                type: string
+              infosclient_app:
+                type: integer
+              proprietaire:
+                type: string
+              financialparent_app:
+                type: string
+              code_app:
+                type: integer
+              comauto_app:
+                type: integer
+              agent_app:
+                type: integer
+              detailsclient_app:
+                type: integer
+              distributeur_app:
+                type: integer
+              lockpaymentnumber_app:
+                type: integer
+              id_pays:
+                type: integer
+              email_abonne:
+                type: string
+              identite_abonne:
+                type: string
+              contact_abonne:
+                type: integer
+
+    PaylinkResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        message:
+          type: string
+        loged_out:
+          type: string
+        paylinks:
+          type: array
+          items:
+            properties:
+              id_file:
+                type: integer
+              id_app:
+                type: integer
+              libelle_file:
+                type: string
+              endpoint_file:
+                type: string
+              datecreation_file:
+                type: string
+              numeroderedirection_file:
+                type: string
+              nom_file:
+                type: string
+              statut_file:
+                type: boolean
+              extension_file:
+                type: string
+              action_file:
+                type: boolean
+              paymentmessage_file:
+                type: string
+              lienexterne_file:
+                type: string
+              description_file:
+                type: string
+              tarification_file:
+                type: integer
+              suividestock_file:
+                type: integer
+              stock_file:
+                type: string
+              dureedevie_file:
+                type: integer
+              datedebut_file:
+                type: string
+              datefin_file:
+                type: string
+              quantiteun_file:
+                type: integer
+              imagedescriptive_file:
+                type: string
+              quantite_vendue_file:
+                type: string
+              montant_vendu_file:
+                type: string
+              agenda_file:
+                type: string
+              nom_app:
+                type: string
+              infosclient_app:
+                type: integer
+
+    PersonalAccount:
+      type: object
+      properties:
+        id_solde:
+          type: integer
+        valeur_solde:
+          type: string
+        id_app:
+          type: integer
+        id_compte:
+          type: integer
+        nom_compte:
+          type: string
+        solde_compte:
+          type: string
+        password_compte:
+          type: string
+        statut_compte:
+          type: integer
+        id_reseau:
+          type: integer
+        id_abonne:
+          type: integer
+        datecreation_compte:
+          type: string
+        id_pays:
+          type: integer
+        codeisoa2_pays:
+          type: string
+        indicatif_pays:
+          type: integer
+        nom_app:
+          type: string
+        nom_abonne:
+          type: string
+        prenom_abonne:
+          type: string
+        email_abonne:
+          type: string
+        nom_reseau:
+          type: string
+        idapp:
+          type: integer
+        lastcredit_solde:
+          type: null
+        pendingpayout_solde:
+          type: null
+        banissement_abonne:
+          type: null
+        balance_abonne:
+          type: integer
+
+    TellerResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        message:
+          type: string
+        loged_out:
+          type: string
+        tellers:
+          type: array
+          items:
+            properties:
+              id_caissier:
+                type: integer
+              id_app:
+                type: integer
+              nom_caissier:
+                type: string
+              code_caissier:
+                type: string
+              statut_caissier:
+                type: integer
+              nom_app:
+                type: string
+
+    Grille:
+      type: object
+      properties:
+        id_grille:
+          type: integer
+        id_reseau:
+          type: integer
+        id_typegrille:
+          type: integer
+        borneinf_grille:
+          type: string
+        bornesup_grille:
+          type: string
+        frais_grille:
+          type: string
+        statut_grille:
+          type: integer
+        id_methode:
+          type: null

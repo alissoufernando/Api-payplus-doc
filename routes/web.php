@@ -17,5 +17,6 @@ use App\Http\Livewire\WelcomeComponent;
 
 Route::get('/', WelcomeComponent::class)->name('welcome');
 Route::get('/documentations', DocumentationComponent::class)->name('documentations');
+Route::view('/swagger', 'swagger');
 
 
